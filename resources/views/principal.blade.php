@@ -25,8 +25,8 @@
                     @php
                     $avatarIndex = min(4, floor(Auth::user()->level / 20) + 1);
                     @endphp
-                    <img src="{{ asset("images/avatar$avatarIndex.png") }}" alt="Avatar"
-                        class="h-auto rounded-full shadow" style="width: 5vw;">
+                    <img src="{{ asset("images/avatar$avatarIndex.gif") }}" alt="Avatar"
+                        class="h-auto rounded-full shadow" style="width: 10vw;">
                 </button>
 
                 <div x-show="showMenu"
@@ -162,7 +162,6 @@
                 </form>
             </div>
         </div>
-        dd($request->repeat);
 
         <!-- Toggle tareas completadas -->
 
