@@ -14,6 +14,7 @@ class Task extends Model
         'title',
         'experience',
         'completed',
+        'repeat',
     ];
 
     public function user()
