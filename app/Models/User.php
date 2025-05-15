@@ -33,7 +33,12 @@ protected $fillable = [
     'password',
     'level',
     'experience',
+    'attribute_points',
+    'fuerza',
+    'defensa',
+    'inteligencia',
 ];
+
 
 public function tasks()
 {

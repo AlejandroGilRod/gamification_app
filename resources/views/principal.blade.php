@@ -6,6 +6,7 @@
     <title>GameTask</title>
     <link rel="icon" type="image/x-icon" href="/images/Icono2.png">
     @vite('resources/css/app.css')
+
     <!-- Toastr CSS -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
 
@@ -14,9 +15,20 @@
 
     <script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <style>
+        [x-cloak] {
+            display: none !important;
+        }
+    </style>
+
 </head>
 
-<body class="bg-gray-900">
+<body class="bg-gray-900" x-data="{ loading: true }" x-init="setTimeout(() => loading = false, 800)">
+
+    <!-- Contenido principal -->
+    <div x-show="!loading" x-transition x-cloak>
+        <!-- aquí va TODO tu contenido actual -->
+    </div>
 
     <div class="flex justify-between items-center px-6 pt-6">
         <div class="flex items-center space-x-4">
@@ -27,37 +39,81 @@
                     @endphp
                     <img src="{{ asset("images/avatar$avatarIndex.gif") }}" alt="Avatar"
                         class="h-auto rounded-full shadow" style="width: 10vw;">
+
                 </button>
 
-                <div x-show="showMenu"
+                <div x-cloak x-show="showMenu"
                     @click.outside="showMenu = false"
                     x-transition
-                    class="absolute mt-2 right-0 w-40 bg-white text-gray-800 rounded shadow-lg z-50">
+                    class="absolute mt-2 right-0 w-48 bg-gray-900 rounded-lg shadow-xl z-50 p-2 space-y-2">
 
-                    <form method="POST" action="{{ route('logout') }}" class="text-left">
+                    <a href="{{ route('estadisticas') }}"
+                        class="block text-center bg-purple-600 hover:bg-purple-700 text-white font-bold px-4 py-2 rounded shadow transition">
+                        Ver estadísticas
+                    </a>
+
+                    <form method="POST" action="{{ route('logout') }}">
                         @csrf
                         <button type="submit"
-                            class="block w-full text-left px-4 py-2 text-sm hover:bg-gray-100">
+                            class="w-full bg-purple-600 hover:bg-purple-700 text-white font-bold px-4 py-2 rounded shadow transition text-center">
                             Cerrar sesión
                         </button>
                     </form>
                 </div>
+
         </div>
 
         <div class="text-left">
             <div class="text-sm text-white font-semibold">
                 {{ Auth::user()->name }} (Nivel {{ Auth::user()->level }})
             </div>
+            @if (Auth::user()->attribute_points > 0)
+            <form method="POST" action="{{ route('attributes.assign') }}" class="mt-4 bg-gray-800 p-4 rounded shadow-lg">
+                @csrf
+                <p class="text-white mb-3 font-bold">🔧 Tienes {{ Auth::user()->attribute_points }} punto(s) de característica por asignar:</p>
+                <div class="grid grid-cols-3 gap-4">
+                    @foreach(['fuerza', 'defensa', 'inteligencia'] as $attr)
+                    <div class="text-center">
+                        <button name="attribute" value="{{ $attr }}"
+                            class="bg-blue-500 hover:bg-blue-600 text-white px-3 py-2 rounded w-full">
+                            +1 {{ ucfirst($attr) }}
+                        </button>
+                        <p class="text-gray-300 mt-1">{{ ucfirst($attr) }} actual: {{ Auth::user()->$attr }}</p>
+                    </div>
+                    @endforeach
+                </div>
+            </form>
+            @endif
+
             @php
             $xp = Auth::user()->experience;
-            $percent = min(100, ($xp % 100));
+            $percentXp = min(100, ($xp % 100));
+
+            $health = Auth::user()->health ?? 100;
+            $maxHealth = 100 + (Auth::user()->fuerza ?? 0);
+            $percentHealth = $maxHealth > 0 ? round(($health / $maxHealth) * 100) : 0;
             @endphp
-            <div class="flex items-center space-x-2 mt-1">
-                <div class="w-40 bg-gray-700 rounded-full h-2">
-                    <div class="bg-yellow-400 h-2 rounded-full" style="width: {{ $percent }}%;"></div>
+
+
+            <div class="flex flex-col gap-2 mt-1">
+                <!-- Salud -->
+                <div class="flex items-center space-x-2">
+                    <div class="w-40 bg-gray-700 rounded-full h-2">
+                        <div class="bg-red-500 h-2 rounded-full" style="width: {{ $percentHealth }}%;"></div>
+                    </div>
+                    <span class="text-sm text-white font-medium">{{ $health }}/{{ $maxHealth }} HP</span>
                 </div>
-                <span class="text-sm text-white font-medium">{{ Auth::user()->experience }}/100</span>
             </div>
+            <!-- XP -->
+            <div class="flex items-center space-x-2">
+                <div class="w-40 bg-gray-700 rounded-full h-2">
+                    <div class="bg-yellow-400 h-2 rounded-full" style="width: {{ $percentXp }}%;"></div>
+                </div>
+                <span class="text-sm text-white font-medium">{{ $xp }}/100 XP</span>
+            </div>
+
+
+
 
         </div>
     </div>
@@ -73,7 +129,7 @@
                     viewBox="0 0 24 24" stroke="white" stroke-width="2">
                     <path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4" />
                 </svg>
-                <svg x-show="open" xmlns="http://www.w3.org/2000/svg" class="w-6 h-6" fill="none"
+                <svg x-cloak x-show="open" xmlns="http://www.w3.org/2000/svg" class="w-6 h-6" fill="none"
                     viewBox="0 0 24 24" stroke="white" stroke-width="2">
                     <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
                 </svg>
@@ -82,7 +138,7 @@
 
         <!-- Modal -->
         <div x-show="open" x-transition.opacity x-transition.scale
-            class="fixed inset-0 flex items-center justify-center z-50 bg-black bg-opacity-50">
+            x-cloak class="fixed inset-0 flex items-center justify-center z-50 bg-black bg-opacity-50">
             <div @click.outside="open = false"
                 class="w-full max-w-xl bg-gray-800 border border-gray-700 p-6 rounded-xl shadow-xl">
                 <form action="{{ route('tasks.store') }}" method="POST" class="space-y-4">
@@ -163,7 +219,6 @@
             </div>
         </div>
 
-        <!-- Toggle tareas completadas -->
 
 
         <!-- Misiones activas -->
@@ -222,15 +277,15 @@
             <div class="mt-10 text-center">
                 <button @click="showCompleted = !showCompleted"
                     class="bg-purple-600 hover:bg-purple-700 text-white font-bold px-4 py-2 rounded shadow transition">
-                    <span x-text="showCompleted ? 'Ocultar tareas completadas' : 'Ver tareas completadas'"></span>
+                    <span x-cloak x-text="showCompleted ? 'Ocultar tareas completadas' : 'Ver tareas completadas'"></span>
                 </button>
 
             </div>
             <!-- Misiones completadas -->
             <div x-show="showCompleted" x-transition>
-                <h3 class="text-xl font-bold text-green-400 mb-4 text-center mt-10">✔ Misiones completadas</h3>
+                <h3 x-cloak class="text-xl font-bold text-green-400 mb-4 text-center mt-10">✔ Misiones completadas</h3>
                 @forelse(Auth::user()->tasks->where('completed', true) as $task)
-                <div class="bg-gray-800 border border-gray-700 p-4 rounded-xl shadow flex justify-between items-center">
+                <div x-cloak class="bg-gray-800 border border-gray-700 p-4 rounded-xl shadow flex justify-between items-center">
                     <div>
                         <div class="font-semibold text-white line-through flex items-start">{{ $task->title }}</div>
                         @php
