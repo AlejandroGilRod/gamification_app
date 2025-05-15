@@ -15,6 +15,7 @@ class Task extends Model
         'experience',
         'completed',
         'repeat',
+        'last_reset_at',
     ];
 
     public function user()
