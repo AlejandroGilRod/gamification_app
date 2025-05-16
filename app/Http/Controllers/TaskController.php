@@ -27,40 +27,49 @@ class TaskController extends Controller
 
         return back()->with('task_created', 'Tarea creada correctamente.');
     }
- public function complete(Task $task)
-{
-    if ($task->user_id !== auth()->id() || $task->completed) {
-        abort(403); // Evita que otro usuario complete tu tarea o se repita
+
+    public function complete(Task $task)
+    {
+        if ($task->user_id !== auth()->id() || $task->completed) {
+            abort(403);
+        }
+
+        $user = auth()->user();
+        $task->completed = true;
+
+        if ($task->repeat !== 'none') {
+            $task->last_reset_at = now();
+        }
+
+        $task->save();
+
+        // XP con inteligencia
+        $xpGanada = $task->experience + ($user->inteligencia ?? 0);
+        $nuevaXP = $user->experience + $xpGanada;
+        $nivelesGanados = intdiv($nuevaXP, 100);
+        $xpRestante = $nuevaXP % 100;
+
+        // Oro aleatorio según dificultad
+        $rangos = [
+            10 => [1, 5],
+            25 => [5, 10],
+            50 => [10, 25],
+            100 => [20, 50],
+        ];
+
+        $rango = $rangos[$task->experience] ?? [0, 0];
+        $oroGanado = rand($rango[0], $rango[1]);
+
+        $user->update([
+            'experience' => $xpRestante,
+            'level' => $user->level + $nivelesGanados,
+            'attribute_points' => $user->attribute_points + $nivelesGanados,
+            'gold' => $user->gold + $oroGanado,
+        ]);
+
+        return back()->with('success', "¡Tarea completada! Ganaste $xpGanada XP y $oroGanado de oro.");
     }
 
-    $user = auth()->user();
-    $task->completed = true;
-
-    if ($task->repeat !== 'none') {
-        $task->last_reset_at = now();
-    }
-
-    $task->save();
-
-    // Añadir experiencia y subir nivel
-    $xpAntes = $user->experience;
-$xpGanada = $task->experience + $user->inteligencia;
-
-    $nuevaXP = $xpAntes + $xpGanada;
-    $nivelesGanados = intdiv($nuevaXP, 100);
-    $xpRestante = $nuevaXP % 100;
-
-    $user->update([
-        'experience' => $xpRestante,
-        'level' => $user->level + $nivelesGanados,
-        'attribute_points' => $user->attribute_points + $nivelesGanados,
-    ]);
-
-    // 🔁 Refrescar los datos de sesión
-    auth()->user()->refresh();
-
-    return back()->with('success', '¡Has completado una tarea y ganado experiencia!');
-}
 
     public function destroy(Task $task)
     {

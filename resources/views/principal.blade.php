@@ -65,7 +65,8 @@
 
         <div class="text-left">
             <div class="text-sm text-white font-semibold">
-                {{ $user->name }} (Nivel {{ $user->level }})
+                {{ $user->name }} (Nivel {{ $user->level }}) 💰 Oro: {{ $user->name }}
+
             </div>
             @if ($user->attribute_points > 0)
             <form method="POST" action="{{ route('attributes.assign') }}" class="mt-4 bg-gray-800 p-4 rounded shadow-lg">
@@ -112,7 +113,9 @@
                 </div>
                 <span class="text-sm text-white font-medium">{{ $xp }}/100 XP</span>
             </div>
-
+            <!-- Oro -->
+        
+S
 
 
 
