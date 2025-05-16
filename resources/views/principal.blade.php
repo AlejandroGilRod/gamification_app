@@ -35,7 +35,7 @@
             <<div class="relative" x-data="{ showMenu: false }">
                 <button @click="showMenu = !showMenu" class="focus:outline-none">
                     @php
-                    $avatarIndex = min(4, floor(Auth::user()->level / 20) + 1);
+                    $avatarIndex = min(5, floor($user->level / 20) + 1);
                     @endphp
                     <img src="{{ asset("images/avatar$avatarIndex.gif") }}" alt="Avatar"
                         class="h-auto rounded-full shadow" style="width: 10vw;">
@@ -65,12 +65,12 @@
 
         <div class="text-left">
             <div class="text-sm text-white font-semibold">
-                {{ Auth::user()->name }} (Nivel {{ Auth::user()->level }})
+                {{ $user->name }} (Nivel {{ $user->level }})
             </div>
-            @if (Auth::user()->attribute_points > 0)
+            @if ($user->attribute_points > 0)
             <form method="POST" action="{{ route('attributes.assign') }}" class="mt-4 bg-gray-800 p-4 rounded shadow-lg">
                 @csrf
-                <p class="text-white mb-3 font-bold">🔧 Tienes {{ Auth::user()->attribute_points }} punto(s) de característica por asignar:</p>
+                <p class="text-white mb-3 font-bold">🔧 Tienes {{ $user()->attribute_points }} punto(s) de característica por asignar:</p>
                 <div class="grid grid-cols-3 gap-4">
                     @foreach(['fuerza', 'defensa', 'inteligencia'] as $attr)
                     <div class="text-center">
@@ -78,7 +78,8 @@
                             class="bg-blue-500 hover:bg-blue-600 text-white px-3 py-2 rounded w-full">
                             +1 {{ ucfirst($attr) }}
                         </button>
-                        <p class="text-gray-300 mt-1">{{ ucfirst($attr) }} actual: {{ Auth::user()->$attr }}</p>
+                        <p class="text-gray-300 mt-1">{{ ucfirst($attr) }} actual: {{ $user->$attr }}
+                        </p>
                     </div>
                     @endforeach
                 </div>
@@ -86,11 +87,11 @@
             @endif
 
             @php
-            $xp = Auth::user()->experience;
+            $xp = $user->experience;
             $percentXp = min(100, ($xp % 100));
 
-            $health = Auth::user()->health ?? 100;
-            $maxHealth = 100 + (Auth::user()->fuerza ?? 0);
+            $health = $user->health ?? 100;
+            $maxHealth = 100 + ($user->fuerza ?? 0);
             $percentHealth = $maxHealth > 0 ? round(($health / $maxHealth) * 100) : 0;
             @endphp
 
@@ -223,7 +224,7 @@
 
         <!-- Misiones activas -->
         <h3 class="text-xl font-bold text-white mb-4 text-center mt-10">📋 Misiones activas</h3>
-        @forelse(Auth::user()->tasks->where('completed', false) as $task)
+        @forelse($user->tasks->where('completed', false) as $task)
         <div class="bg-gray-800 border border-gray-700 p-4 rounded-xl shadow flex justify-between items-center">
             <div>
                 <div class="font-semibold text-white">{{ $task->title }}</div>
@@ -238,6 +239,21 @@
                 @endphp
                 <div class="text-sm text-gray-400">
                     Dificultad: {{ $dificultadTexto }} — Otorga {{ $task->experience }} XP
+                </div>
+                @php
+                $repetirTexto = match($task->repeat) {
+                'none' => 'No',
+                'daily' => 'Diaria',
+                'weekly' => 'Semanal',
+                'monthly' => 'Mensual',
+                default => 'Desconocida'
+                };
+                @endphp
+                <div class="text-sm text-gray-400">
+                    Repetir: {{ $repetirTexto }}
+                </div>
+                <div class="text-sm text-gray-400">
+                    Hora de creacion {{ $task->created_at }}
                 </div>
 
             </div>
@@ -284,7 +300,7 @@
             <!-- Misiones completadas -->
             <div x-show="showCompleted" x-transition>
                 <h3 x-cloak class="text-xl font-bold text-green-400 mb-4 text-center mt-10">✔ Misiones completadas</h3>
-                @forelse(Auth::user()->tasks->where('completed', true) as $task)
+                @forelse($user->tasks->where('completed', true) as $task)
                 <div x-cloak class="bg-gray-800 border border-gray-700 p-4 rounded-xl shadow flex justify-between items-center">
                     <div>
                         <div class="font-semibold text-white line-through flex items-start">{{ $task->title }}</div>
@@ -297,9 +313,25 @@
                         default => 'Desconocida'
                         };
                         @endphp
-                        <div class="text-sm text-gray-400">
+                        <div class="text-sm text-gray-400 flex items-start ">
                             Dificultad: {{ $dificultadTexto }} — Otorga {{ $task->experience }} XP
                         </div>
+                        @php
+                        $repetirTexto = match($task->repeat) {
+                        'none' => 'No',
+                        'daily' => 'Diaria',
+                        'weekly' => 'Semanal',
+                        'monthly' => 'Mensual',
+                        default => 'Desconocida'
+                        };
+                        @endphp
+                        <div class="text-sm text-gray-400 flex items-start">
+                            Repetir: {{ $repetirTexto }}
+                        </div>
+                        <div class="text-sm text-gray-400 flex items-start">
+                            Hora de creacion {{ $task->created_at }}
+                        </div>
+
                     </div>
                     <span class="text-green-400 font-semibold self-center">✔ Completada</span>
                 </div>

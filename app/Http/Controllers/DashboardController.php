@@ -15,40 +15,43 @@ class DashboardController extends Controller
         $now = now();
 
         foreach ($user->tasks as $task) {
-            if ($task->completed && $task->repeat !== 'none' && $task->last_reset_at) {
-                $lastReset = Carbon::parse($task->last_reset_at);
+            if ($task->repeat !== 'none') {
+                $lastReset = $task->last_reset_at ?? $task->created_at;
 
                 $shouldReset = match ($task->repeat) {
-                    'daily' => $lastReset->diffInDays($now) >= 1,
-                    'weekly' => $lastReset->diffInWeeks($now) >= 1,
-                    'monthly' => $lastReset->diffInMonths($now) >= 1,
+                    'daily' => Carbon::parse($lastReset)->diffInDays($now) >= 1,
+                    'weekly' => Carbon::parse($lastReset)->diffInWeeks($now) >= 1,
+                    'monthly' => Carbon::parse($lastReset)->diffInMonths($now) >= 1,
                     default => false,
                 };
 
                 if ($shouldReset) {
-                    // 🔻 Calcular daño
-                    $dañoBase = match ($task->experience) {
-                        10 => 5,
-                        25 => 12,
-                        50 => 25,
-                        100 => 50,
-                        default => 0,
-                    };
+                    // Si la tarea NO está completada, aplica daño
+                    if (!$task->completed) {
+                        $dañoBase = match ($task->experience) {
+                            10 => 5,
+                            25 => 12,
+                            50 => 25,
+                            100 => 50,
+                            default => 0,
+                        };
+                        $dañoFinal = max(0, $dañoBase - $user->defensa);
+                        $user->health = max(0, $user->health - $dañoFinal);
+                    }
 
-                    $dañoFinal = max(0, $dañoBase - $user->defensa);
-                    $user->health = max(0, $user->health - $dañoFinal);
-
+                    // En todos los casos se resetea la tarea
                     $task->update([
                         'completed' => false,
-                        'last_reset_at' => null,
+                        'last_reset_at' => $now,
                     ]);
                 }
             }
         }
 
-        $user->save(); // ✅ Guardar vida después de aplicar daño
+        $user->save();
         return redirect('/principal');
     }
+
 
     public function assignAttribute(Request $request)
     {

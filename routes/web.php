@@ -9,9 +9,6 @@ Route::get('/', function () {
 });
 Route::get('/principal', [PrincipalController::class, 'index'])->middleware('auth');
 
-Route::get('/principal', function () {
-    return view('principal');
-})->middleware('auth');
 
 Route::middleware([
     'auth:sanctum',
