@@ -18,11 +18,24 @@
             <li>👤 Nombre: <strong>{{ Auth::user()->name }}</strong></li>
             <li>🎚 Nivel: <strong>{{ Auth::user()->level }}</strong></li>
             <li>⚡ XP actual: <strong>{{ Auth::user()->experience }}/100</strong></li>
+
             <li>💪 Fuerza: <strong>{{ Auth::user()->fuerza }}</strong></li>
             <li>🛡️ Defensa: <strong>{{ Auth::user()->defensa }}</strong></li>
             <li>🧠 Inteligencia: <strong>{{ Auth::user()->inteligencia }}</strong></li>
             <li>🎯 Puntos sin asignar: <strong>{{ Auth::user()->attribute_points }}</strong></li>
         </ul>
+        @if($equipamiento->isNotEmpty())
+        <h3 class="text-xl text-yellow-400 font-bold mt-10">🛡️ Equipamiento actual</h3>
+        <ul class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 mt-4">
+            @foreach($equipamiento as $item)
+            <li class="bg-gray-700 rounded p-4 shadow text-center">
+                <img src="{{ asset($item->image_url) }}" alt="{{ $item->name }}" class="mx-auto h-20 w-20 object-contain mb-2">
+                <div class="text-white font-bold">{{ $item->name }}</div>
+                <div class="text-sm text-gray-300">{{ $item->description }}</div>
+            </li>
+            @endforeach
+        </ul>
+        @endif
 
         <div class="text-center mt-8">
             <a href="{{ route('dashboard') }}"

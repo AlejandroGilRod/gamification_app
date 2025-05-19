@@ -1,7 +1,5 @@
 <x-guest-layout>
         <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="icon" type="image/x-icon" href="/images/Icono2.png">
-
     <div class="min-h-screen flex items-center justify-center bg-gray-900 px-4">
         <div class="w-full sm:max-w-md mt-6 px-6 py-4 rounded-2xl shadow-2xl  text-sm">
 

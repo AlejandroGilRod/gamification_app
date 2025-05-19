@@ -37,8 +37,13 @@ protected $fillable = [
     'fuerza',
     'defensa',
     'inteligencia',
+    'gold',
 ];
 
+public function items()
+{
+    return $this->belongsToMany(Item::class)->withTimestamps();
+}
 
 public function tasks()
 {

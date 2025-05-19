@@ -78,4 +78,5 @@ class DashboardController extends Controller
 
         return back()->with('success', '¡Has mejorado tu ' . $attribute . '!');
     }
+    
 }

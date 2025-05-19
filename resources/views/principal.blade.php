@@ -51,6 +51,10 @@
                         class="block text-center bg-purple-600 hover:bg-purple-700 text-white font-bold px-4 py-2 rounded shadow transition">
                         Ver estadísticas
                     </a>
+                    <a href="{{ route('tienda') }}"
+                        class="block text-center bg-purple-600 hover:bg-purple-700 text-white font-bold px-4 py-2 rounded shadow transition">
+                        Ir a la tienda
+                    </a>
 
                     <form method="POST" action="{{ route('logout') }}">
                         @csrf
@@ -65,13 +69,12 @@
 
         <div class="text-left">
             <div class="text-sm text-white font-semibold">
-                {{ $user->name }} (Nivel {{ $user->level }}) 💰 Oro: {{ $user->name }}
-
+                {{ $user->name }} (Nivel {{ $user->level }}) 💰 Oro: {{ $user->gold }}
             </div>
             @if ($user->attribute_points > 0)
             <form method="POST" action="{{ route('attributes.assign') }}" class="mt-4 bg-gray-800 p-4 rounded shadow-lg">
                 @csrf
-                <p class="text-white mb-3 font-bold">🔧 Tienes {{ $user()->attribute_points }} punto(s) de característica por asignar:</p>
+                <p class="text-white mb-3 font-bold">🔧 Tienes {{ $user->attribute_points }} punto(s) de característica por asignar:</p>
                 <div class="grid grid-cols-3 gap-4">
                     @foreach(['fuerza', 'defensa', 'inteligencia'] as $attr)
                     <div class="text-center">
@@ -114,8 +117,8 @@
                 <span class="text-sm text-white font-medium">{{ $xp }}/100 XP</span>
             </div>
             <!-- Oro -->
-        
-S
+
+            S
 
 
 
