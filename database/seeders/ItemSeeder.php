@@ -50,7 +50,7 @@ class ItemSeeder extends Seeder
             ],
             [
                 'name' => 'Cristal de rubí',
-                'description' => 'Aumenta tu fuerza en +10.',
+                'description' => 'Aumenta tu fuerza en +3.',
                 'image_url' => 'images/cristal_rubi.png',
                 'stat_target' => 'fuerza',
                 'stat_bonus' => 3,

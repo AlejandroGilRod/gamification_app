@@ -2,19 +2,32 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Carbon;
 
 class PrincipalController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
+        $showCompleted = $request->query('show_completed') === 'true';
+
         $user = Auth::user();
 
-       $user = Auth::user()->load('tasks');
+        $repeatFilter = $request->query('repeat');
 
-return view('principal', compact('user'));
+        $validRepeats = ['none', 'daily', 'weekly', 'monthly'];
 
+        $incompleteTasksQuery = $user->tasks()->where('completed', false);
+        $completedTasksQuery = $user->tasks()->where('completed', true);
 
+        if (in_array($repeatFilter, $validRepeats)) {
+            $incompleteTasksQuery->where('repeat', $repeatFilter);
+            $completedTasksQuery->where('repeat', $repeatFilter);
+        }
+
+        $incompleteTasks = $incompleteTasksQuery->orderByDesc('created_at')->paginate(5, ['*'], 'incomplete_page');
+        $completedTasks = $completedTasksQuery->orderByDesc('created_at')->paginate(5, ['*'], 'completed_page');
+
+        return view('principal', compact('user', 'incompleteTasks', 'completedTasks', 'repeatFilter', 'showCompleted'));
     }
 }

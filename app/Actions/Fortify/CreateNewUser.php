@@ -16,7 +16,7 @@ class CreateNewUser implements CreatesNewUsers
      * Validate and create a newly registered user.
      *
      * @param  array<string, string>  $input
-     */
+     */ 
     public function create(array $input): User
     {
         Validator::make($input, [
@@ -24,7 +24,16 @@ class CreateNewUser implements CreatesNewUsers
             'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
             'password' => $this->passwordRules(),
             'terms' => Jetstream::hasTermsAndPrivacyPolicyFeature() ? ['accepted', 'required'] : '',
-        ])->validate();
+        ])->validateWithBag('register', [
+            'name.required' => 'Por favor, introduce tu nombre.',
+            'email.required' => 'El correo electrónico es obligatorio.',
+            'email.email' => 'Introduce un correo electrónico válido.',
+            'email.unique' => 'Este correo ya está en uso.',
+            'password.required' => 'La contraseña es obligatoria.',
+            'password.min' => 'La contraseña debe tener al menos :min caracteres.',
+            'terms.accepted' => 'Debes aceptar los términos y condiciones.',
+        ]);
+
 
         return User::create([
             'name' => $input['name'],

@@ -118,7 +118,7 @@
             </div>
             <!-- Oro -->
 
-            S
+
 
 
 
@@ -150,7 +150,7 @@
                 class="w-full max-w-xl bg-gray-800 border border-gray-700 p-6 rounded-xl shadow-xl">
                 <form action="{{ route('tasks.store') }}" method="POST" class="space-y-4">
                     @csrf
-                    <h3 class="text-yellow-400 font-bold text-xl text-center">📝 Crear nueva misión</h3>
+                    <h3 class="text-purple-500  font-bold text-xl text-center">📝 Crear nueva misión</h3>
 
                     <input type="text" name="title" placeholder="Nombre de la tarea" required
                         class="w-full bg-gray-700 px-3 py-2 text-white rounded-md border border-gray-600 focus:ring-2 focus:ring-yellow-400">
@@ -158,28 +158,28 @@
                     <div class="flex flex-wrap justify-center gap-4">
                         <label>
                             <input type="radio" name="difficulty" value="10" class="hidden peer" required>
-                            <div class="peer-checked:bg-yellow-500 peer-checked:text-black bg-gray-700 text-white px-4 py-2 rounded cursor-pointer transition">
+                            <div class="peer-checked:bg-purple-600 peer-checked:text-white bg-gray-700 text-white px-4 py-2 rounded cursor-pointer transition">
                                 Fácil
                             </div>
                         </label>
 
                         <label>
                             <input type="radio" name="difficulty" value="25" class="hidden peer">
-                            <div class="peer-checked:bg-yellow-500 peer-checked:text-black bg-gray-700 text-white px-4 py-2 rounded cursor-pointer transition">
+                            <div class="peer-checked:bg-purple-600 peer-checked:text-white bg-gray-700 text-white px-4 py-2 rounded cursor-pointer transition">
                                 Normal
                             </div>
                         </label>
 
                         <label>
                             <input type="radio" name="difficulty" value="50" class="hidden peer">
-                            <div class="peer-checked:bg-yellow-500 peer-checked:text-black bg-gray-700 text-white px-4 py-2 rounded cursor-pointer transition">
+                            <div class="peer-checked:bg-purple-600 peer-checked:text-white bg-gray-700 text-white px-4 py-2 rounded cursor-pointer transition">
                                 Difícil
                             </div>
                         </label>
 
                         <label>
                             <input type="radio" name="difficulty" value="100" class="hidden peer">
-                            <div class="peer-checked:bg-yellow-500 peer-checked:text-black bg-gray-700 text-white px-4 py-2 rounded cursor-pointer transition">
+                            <div class="peer-checked:bg-purple-600 peer-checked:text-white bg-gray-700 text-white px-4 py-2 rounded cursor-pointer transition">
                                 Muy Difícil
                             </div>
                         </label>
@@ -187,28 +187,28 @@
                     <div class="flex flex-wrap justify-center gap-4 mt-4">
                         <label>
                             <input type="radio" name="repeat" value="none" class="hidden peer" checked>
-                            <div class="peer-checked:bg-yellow-500 peer-checked:text-black bg-gray-700 text-white px-4 py-2 rounded cursor-pointer transition">
+                            <div class="peer-checked:bg-purple-600 peer-checked:text-white bg-gray-700 text-white px-4 py-2 rounded cursor-pointer transition">
                                 No repetir
                             </div>
                         </label>
 
                         <label>
                             <input type="radio" name="repeat" value="daily" class="hidden peer">
-                            <div class="peer-checked:bg-yellow-500 peer-checked:text-black bg-gray-700 text-white px-4 py-2 rounded cursor-pointer transition">
+                            <div class="peer-checked:bg-purple-600 peer-checked:text-white bg-gray-700 text-white px-4 py-2 rounded cursor-pointer transition">
                                 Diaria
                             </div>
                         </label>
 
                         <label>
                             <input type="radio" name="repeat" value="weekly" class="hidden peer">
-                            <div class="peer-checked:bg-yellow-500 peer-checked:text-black bg-gray-700 text-white px-4 py-2 rounded cursor-pointer transition">
+                            <div class="peer-checked:bg-purple-600 peer-checked:text-white bg-gray-700 text-white px-4 py-2 rounded cursor-pointer transition">
                                 Semanal
                             </div>
                         </label>
 
                         <label>
                             <input type="radio" name="repeat" value="monthly" class="hidden peer">
-                            <div class="peer-checked:bg-yellow-500 peer-checked:text-black bg-gray-700 text-white px-4 py-2 rounded cursor-pointer transition">
+                            <div class="peer-checked:bg-purple-600 peer-checked:text-white bg-gray-700 text-white px-4 py-2 rounded cursor-pointer transition">
                                 Mensual
                             </div>
                         </label>
@@ -218,7 +218,7 @@
 
                     <div class="flex justify-end">
                         <button type="submit"
-                            class="bg-yellow-500 hover:bg-yellow-600 text-gray-900 font-bold px-4 py-2 rounded shadow">
+                            class="bg-purple-600 hover:bg-purple-700 text-white font-bold px-4 py-2 rounded shadow">
                             Crear tarea
                         </button>
                     </div>
@@ -226,11 +226,22 @@
             </div>
         </div>
 
+        <form method="GET" action="{{ route('principal') }}" class="text-center mt-8 mb-6">
+            <label for="repeat" class="text-white font-semibold">Filtrar por repetición:</label>
+            <select name="repeat" id="repeat" class="ml-2 px-3 py-1 rounded bg-gray-700 text-white">
+                <option value="">Todas</option>
+                <option value="none" {{ $repeatFilter == 'none' ? 'selected' : '' }}>Sin repetición</option>
+                <option value="daily" {{ $repeatFilter == 'daily' ? 'selected' : '' }}>Diaria</option>
+                <option value="weekly" {{ $repeatFilter == 'weekly' ? 'selected' : '' }}>Semanal</option>
+                <option value="monthly" {{ $repeatFilter == 'monthly' ? 'selected' : '' }}>Mensual</option>
+            </select>
+            <button type="submit" class="ml-2 px-4 py-1 bg-purple-600 hover:bg-purple-700 text-white rounded">Aplicar</button>
+        </form>
 
 
         <!-- Misiones activas -->
         <h3 class="text-xl font-bold text-white mb-4 text-center mt-10">📋 Misiones activas</h3>
-        @forelse($user->tasks->where('completed', false) as $task)
+        @forelse($incompleteTasks as $task)
         <div class="bg-gray-800 border border-gray-700 p-4 rounded-xl shadow flex justify-between items-center">
             <div>
                 <div class="font-semibold text-white">{{ $task->title }}</div>
@@ -295,56 +306,71 @@
         @empty
         <div class="text-center text-gray-400">No tienes tareas activas.</div>
         @endforelse
+        <!-- Paginación de incompletas -->
+        <div class="mt-6">
+            {{ $incompleteTasks->appends(['repeat' => $repeatFilter, 'show_completed' => $showCompleted ? 'true' : null])->links() }}
+        </div>
         <div class="mt-10 text-center">
-            <div class="mt-10 text-center">
-                <button @click="showCompleted = !showCompleted"
+            <form method="GET" action="{{ route('principal') }}" class="text-center mt-6">
+                <input type="hidden" name="repeat" value="{{ $repeatFilter }}">
+                <input type="hidden" name="show_completed" value="{{ $showCompleted ? 'false' : 'true' }}">
+                <button type="submit"
                     class="bg-purple-600 hover:bg-purple-700 text-white font-bold px-4 py-2 rounded shadow transition">
-                    <span x-cloak x-text="showCompleted ? 'Ocultar tareas completadas' : 'Ver tareas completadas'"></span>
+                    {{ $showCompleted ? 'Ocultar tareas completadas' : 'Ver tareas completadas' }}
                 </button>
+            </form>
 
-            </div>
             <!-- Misiones completadas -->
-            <div x-show="showCompleted" x-transition>
-                <h3 x-cloak class="text-xl font-bold text-green-400 mb-4 text-center mt-10">✔ Misiones completadas</h3>
-                @forelse($user->tasks->where('completed', true) as $task)
-                <div x-cloak class="bg-gray-800 border border-gray-700 p-4 rounded-xl shadow flex justify-between items-center">
-                    <div>
-                        <div class="font-semibold text-white line-through flex items-start">{{ $task->title }}</div>
-                        @php
-                        $dificultadTexto = match($task->experience) {
-                        10 => 'Fácil',
-                        25 => 'Normal',
-                        50 => 'Difícil',
-                        100 => 'Muy Difícil',
-                        default => 'Desconocida'
-                        };
-                        @endphp
-                        <div class="text-sm text-gray-400 flex items-start ">
-                            Dificultad: {{ $dificultadTexto }} — Otorga {{ $task->experience }} XP
-                        </div>
-                        @php
-                        $repetirTexto = match($task->repeat) {
-                        'none' => 'No',
-                        'daily' => 'Diaria',
-                        'weekly' => 'Semanal',
-                        'monthly' => 'Mensual',
-                        default => 'Desconocida'
-                        };
-                        @endphp
-                        <div class="text-sm text-gray-400 flex items-start">
-                            Repetir: {{ $repetirTexto }}
-                        </div>
-                        <div class="text-sm text-gray-400 flex items-start">
-                            Hora de creacion {{ $task->created_at }}
-                        </div>
+            @if($showCompleted)
+            <h3 class="text-xl font-bold text-green-400 mb-4 text-center mt-10">✔ Misiones completadas</h3>
+            @forelse($completedTasks as $task)
+            <div class="bg-gray-800 border border-gray-700 p-4 rounded-xl shadow flex justify-between items-center">
+                <div>
+                    <div class="font-semibold text-white line-through flex items-start">{{ $task->title }}</div>
+                    @php
+                    $dificultadTexto = match($task->experience) {
+                    10 => 'Fácil',
+                    25 => 'Normal',
+                    50 => 'Difícil',
+                    100 => 'Muy Difícil',
+                    default => 'Desconocida'
+                    };
+                    @endphp
+                    <div class="text-sm text-gray-400 flex items-start">
+                        Dificultad: {{ $dificultadTexto }} — Otorga {{ $task->experience }} XP
+                    </div>
+
+                    <div class="text-sm text-gray-400 flex items-start">
+                       @php
+    $repetirTexto = match($task->repeat) {
+        'none' => 'No',
+        'daily' => 'Diaria',
+        'weekly' => 'Semanal',
+        'monthly' => 'Mensual',
+        default => 'Desconocida'
+    };
+@endphp
+<div class="text-sm text-gray-400 flex items-start">
+    Repetir: {{ $repetirTexto }}
+</div>
 
                     </div>
-                    <span class="text-green-400 font-semibold self-center">✔ Completada</span>
+                    <div class="text-sm text-gray-400 flex items-start">
+                        Hora de creación: {{ $task->created_at }}
+                    </div>
                 </div>
-                @empty
-                <div class="text-center text-gray-400">No tienes tareas completadas.</div>
-                @endforelse
+                <span class="text-green-400 font-semibold self-center">✔ Completada</span>
             </div>
+            @empty
+            <div class="text-center text-gray-400">No tienes tareas completadas.</div>
+            @endforelse
+
+            <!-- Paginación de completadas -->
+            <div class="mt-6">
+                {{ $completedTasks->appends(['repeat' => $repeatFilter, 'show_completed' => 'true'])->links() }}
+            </div>
+            @endif
+
 
         </div>
 

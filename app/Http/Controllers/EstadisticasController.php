@@ -9,8 +9,8 @@ class EstadisticasController extends Controller
 {
     public function index()
     {
-        $user = Auth::user()->load('items');
-        $equipamiento = $user->items->where('type', 'equipamiento');
+        $user = auth()->user();
+        $equipamiento = $user->items; // obtener todos los objetos del usuario
 
         return view('estadisticas', compact('equipamiento'));
     }

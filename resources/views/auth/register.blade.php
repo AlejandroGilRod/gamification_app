@@ -10,7 +10,7 @@
                 <p class="text-gray-300">Gamifica tu productividad. ¡Sube de nivel completando tus tareas!</p>
             </div>
 
-            <img src="{{ asset('images/Recepcionista.png') }}" alt="Imagen RPG" class="h-20 w-auto mx-auto mb-6 rounded-xl shadow-md">
+            <img src="{{ asset('images/Recepcionista.png') }}" alt="Imagen RPG" class="h-45 w-auto mx-auto mb-6 rounded-xl shadow-md">
 
             <x-validation-errors class="mb-4" />
 

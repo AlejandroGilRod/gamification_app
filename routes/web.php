@@ -10,7 +10,7 @@ use App\Http\Controllers\EstadisticasController;
 Route::get('/', function () {
     return view('welcome');
 });
-Route::get('/principal', [PrincipalController::class, 'index'])->middleware('auth');
+Route::get('/principal', [PrincipalController::class, 'index'])->middleware('auth')->name('principal');
 
 
 Route::middleware([

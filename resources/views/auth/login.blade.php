@@ -8,7 +8,7 @@
                 <p class="text-gray-300">Completa misiones, gana experiencia y sube de nivel.</p>
             </div>
 
-            <img src="{{ asset('images/AnimacionCaminar.gif') }}" alt="Imagen RPG" class="w-32 mx-auto mb-6 rounded-xl shadow-md">
+            <img src="{{ asset('images/AnimacionCaminar.gif') }}" alt="Imagen RPG" class="w-82 mx-auto mb-6 rounded-xl shadow-md">
 
             <x-validation-errors class="mb-4" />
 
