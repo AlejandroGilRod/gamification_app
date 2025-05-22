@@ -16,6 +16,13 @@ class PrincipalController extends Controller
         $repeatFilter = $request->query('repeat');
 
         $validRepeats = ['none', 'daily', 'weekly', 'monthly'];
+        if ($user->health <= 0) {
+            $user->level = max(1, $user->level - 5);
+            $user->health = 100 + ($user->fuerza ?? 0);
+            session()->flash('you_died', true);
+        }
+
+        $user->save();
 
         $incompleteTasksQuery = $user->tasks()->where('completed', false);
         $completedTasksQuery = $user->tasks()->where('completed', true);

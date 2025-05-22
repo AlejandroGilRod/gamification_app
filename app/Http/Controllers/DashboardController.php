@@ -75,8 +75,14 @@ class DashboardController extends Controller
         $user->save();
 
         $user->save();
+        if ($user->health <= 0) {
+            $user->level = max(1, $user->level - 5);
+            $user->health = 100 + ($user->fuerza ?? 0);
+            $user->save();
+
+            session()->flash('you_died', true);
+        }
 
         return back()->with('success', '¡Has mejorado tu ' . $attribute . '!');
     }
-    
 }

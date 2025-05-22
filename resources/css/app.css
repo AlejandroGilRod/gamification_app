@@ -1,6 +1,17 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+@font-face {
+    font-family: "OptimusPrinceps";
+    src: url("/fonts/OptimusPrinceps.ttf") format("truetype");
+    font-weight: normal;
+}
+
+@font-face {
+    font-family: "OptimusPrinceps";
+    src: url("/fonts/OptimusPrincepsSemiBold.ttf") format("truetype");
+    font-weight: bold;
+}
 
 [x-cloak] {
     display: none;

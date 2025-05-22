@@ -11,6 +11,8 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
 
     <link href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" />
+
     <script src="https://cdn.tailwindcss.com"></script>
 
     <script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
@@ -28,6 +30,19 @@
     <!-- Contenido principal -->
     <div x-show="!loading" x-transition x-cloak>
         <!-- aquí va TODO tu contenido actual -->
+        @if(session('you_died'))
+        <div
+            x-data="{ visible: true }"
+            x-show="visible"
+            @click="visible = false"
+            class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-80 z-50 cursor-pointer">
+            <h1 style="font-family: 'AGaramond-Regular'; color: #731d1c;" class="  text-6xl font-extrabold animate__animated animate__zoomIn animate__slower">
+                 YOU DIED
+            </h1>
+        </div>
+        @endif
+
+
     </div>
 
     <div class="flex justify-between items-center px-6 pt-6">
@@ -48,7 +63,7 @@
                     class="absolute mt-2 right-0 w-48 bg-gray-900 rounded-lg shadow-xl z-50 p-2 space-y-2">
 
                     <a href="{{ route('estadisticas') }}"
-                        class="block text-center bg-purple-600 hover:bg-purple-700 text-white font-bold px-4 py-2 rounded shadow transition">
+                        class=" block text-center bg-purple-600 hover:bg-purple-700 text-white font-bold px-4 py-2 rounded shadow transition">
                         Ver estadísticas
                     </a>
                     <a href="{{ route('tienda') }}"
@@ -239,8 +254,8 @@
         </form>
 
 
-        <!-- Misiones activas -->
-        <h3 class="text-xl font-bold text-white mb-4 text-center mt-10">📋 Misiones activas</h3>
+  
+        <h3 class=" font-Princeps text-xl  text-white mb-4 text-center mt-10" >📋 Misiones activas</h3>
         @forelse($incompleteTasks as $task)
         <div class="bg-gray-800 border border-gray-700 p-4 rounded-xl shadow flex justify-between items-center">
             <div>
@@ -341,18 +356,18 @@
                     </div>
 
                     <div class="text-sm text-gray-400 flex items-start">
-                       @php
-    $repetirTexto = match($task->repeat) {
-        'none' => 'No',
-        'daily' => 'Diaria',
-        'weekly' => 'Semanal',
-        'monthly' => 'Mensual',
-        default => 'Desconocida'
-    };
-@endphp
-<div class="text-sm text-gray-400 flex items-start">
-    Repetir: {{ $repetirTexto }}
-</div>
+                        @php
+                        $repetirTexto = match($task->repeat) {
+                        'none' => 'No',
+                        'daily' => 'Diaria',
+                        'weekly' => 'Semanal',
+                        'monthly' => 'Mensual',
+                        default => 'Desconocida'
+                        };
+                        @endphp
+                        <div class="text-sm text-gray-400 flex items-start">
+                            Repetir: {{ $repetirTexto }}
+                        </div>
 
                     </div>
                     <div class="text-sm text-gray-400 flex items-start">
