@@ -11,8 +11,10 @@ class ShopController extends Controller
     public function index()
     {
         $items = Item::all();
+            $user = Auth::user(); // Asegúrate de incluir esto
+
         $userItems = auth()->user()->items->pluck('id')->toArray();
-        return view('tienda', compact('items', 'userItems'));
+        return view('tienda', compact('items', 'userItems', 'user'));
     }
 
     public function comprar(Request $request, $itemId)

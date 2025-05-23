@@ -13,7 +13,9 @@
 </head>
 
 <body class="bg-gray-900 text-white min-h-screen px-6 py-12">
-
+<div class="text-center mb-6 text-white text-lg">
+    🪙 Oro disponible: <span class="font-bold text-yellow-400">{{ $user->gold }}</span>
+</div>
 
     <div class="max-w-5xl mx-auto">
         <h2 class="text-3xl font-bold text-purple-500 mb-8 text-center">🛒 Tienda de objetos</h2>
