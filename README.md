@@ -1,61 +1,100 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# GameTask 🎮📋
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+GameTask es una aplicación web de **gestión de tareas gamificada**. Está inspirada en los videojuegos RPG y permite a los usuarios convertir su rutina diaria en misiones, ganar experiencia, oro y mejorar atributos de personaje como fuerza, defensa o inteligencia. Su objetivo es combatir la procrastinación y fomentar la constancia mediante una experiencia visualmente atractiva y motivadora.
 
-## About Laravel
+## 🛠 Tecnologías utilizadas
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+- **Backend**: Laravel 10+
+- **Frontend**: Blade, TailwindCSS, Alpine.js
+- **Build tools**: Vite
+- **Base de datos**: SQLite
+- **Contenedores**: Docker + Docker Compose
+- **Autenticación**: Laravel Fortify + Jetstream
+- **Notificaciones**: SweetAlert2, Toastr
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+## ⚙️ Requisitos previos
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+Asegúrate de tener instalado:
 
-## Learning Laravel
+- Docker
+- Docker Compose
+- (Opcional para entorno local) PHP 8.1+, Composer, Node.js, NPM
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+## 🚀 Instalación y ejecución con Docker
 
-You may also try the [Laravel Bootcamp](https://bootcamp.laravel.com), where you will be guided through building a modern Laravel application from scratch.
+1. Clona el repositorio o descomprime el proyecto:
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+   ```bash
+   git clone <url_del_repositorio>
+   cd gamification_app
 
-## Laravel Sponsors
+    Copia el archivo de entorno y modifica si es necesario:
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
+cp .env.example .env
 
-### Premium Partners
+Crea los contenedores y levanta el proyecto:
 
-- **[Vehikl](https://vehikl.com/)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel/)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Redberry](https://redberry.international/laravel-development/)**
-- **[Active Logic](https://activelogic.com)**
+docker-compose up --build
 
-## Contributing
+Accede a la aplicación en tu navegador:
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+    http://localhost
 
-## Code of Conduct
+🧪 Uso en entorno local (sin Docker)
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+    Instala dependencias de PHP y JS:
 
-## Security Vulnerabilities
+composer install
+npm install
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+Copia el entorno y genera la clave de app:
 
-## License
+cp .env.example .env
+php artisan key:generate
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+Ejecuta migraciones:
+
+php artisan migrate
+
+Inicia el servidor de desarrollo y compilación:
+
+    php artisan serve
+    npm run dev
+
+    Visita http://127.0.0.1:8000 en tu navegador.
+
+📦 Estructura del proyecto
+
+    app/Http/Controllers: Lógica del sistema (tareas, tienda, estadísticas…)
+
+    resources/views: Plantillas Blade
+
+    routes/web.php: Rutas principales
+
+    database/migrations: Tablas y estructura de base de datos
+
+    public/images: Avatares, iconos y elementos RPG
+
+    docker-compose.yml y Dockerfile: Configuración de contenedores
+
+📈 Funcionalidades destacadas
+
+    Gestión de tareas con repetición y dificultad
+
+    Recompensas en forma de XP, oro y subida de nivel
+
+    Penalizaciones automáticas por no cumplir tareas
+
+    Tienda de objetos que modifican atributos
+
+    Estadísticas visuales del personaje
+
+📌 Notas
+
+    La base de datos por defecto es SQLite, para facilidad de uso en desarrollo.
+
+    Puedes usar php artisan migrate:fresh --seed para reiniciar la base de datos con datos iniciales.
+
+    Si usas Windows, asegúrate de configurar correctamente el entorno .env para que Docker y Laravel funcionen sin conflictos.
+
+¡Gracias por probar GameTask! 💪
